@@ -20,10 +20,11 @@ const createUser = async (req, res) => {
       email,
       password: passwordHash,
     });
-
     const savedUser = await newUser.save();
-    delete savedUser.password;
-    res.status(200).json(savedUser).end();
+    let user = savedUser.toObject();
+    delete user.password;
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRETE_KEY);
+    res.status(201).json({ user, token }).end();
   } catch (err) {
     res.status(500).json({ message: `Something went wrong \n : ${err}` });
   }

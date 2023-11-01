@@ -1,20 +1,8 @@
-import { Grid, Typography, useTheme, Box } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import Progress from "./Progress";
 export default function Sidebar() {
-  const theme = useTheme();
   return (
-    <Grid
-      item
-      xs={3}
-      sx={{
-        backgroundColor: theme.palette.background.alt,
-        p: 2,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
+    <>
       <Box
         sx={{
           display: "flex",
@@ -32,6 +20,6 @@ export default function Sidebar() {
       </Box>
       {/* footer box */}
       <Box>some text</Box>
-    </Grid>
+    </>
   );
 }
