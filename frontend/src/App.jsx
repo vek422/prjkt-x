@@ -10,25 +10,30 @@ import {
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { themeSettings } from "./theme.js";
 import { useSelector } from "react-redux";
-import Login from "./pages/Login";
+
 import Invite from "./pages/Invite";
-import Register from "./pages/Register";
+
+import PrivateRoute from "./router/PrivateRoute";
+import AuthRoute from "./router/AuthRoute";
 export default function App() {
   const mode = useSelector((state) => state.theme.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const user = useSelector((state) => state.auth.user);
+
   return (
     <div className="app">
       <Router>
         <ThemeProvider theme={theme}>
           <CssBaseline enableColorScheme />
-
-          <Routes>
-            <Route path="/" element={<Invite />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-          {!user && <Navigate to="/login" replace={true} />}
+          {/* Router Setup */}
+          {user && (
+            <PrivateRoute>
+              <Routes>
+                <Route path="/" element={<Invite />} />
+              </Routes>
+            </PrivateRoute>
+          )}
+          <AuthRoute />
         </ThemeProvider>
       </Router>
     </div>

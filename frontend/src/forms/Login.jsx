@@ -17,20 +17,40 @@ import GoogleIcon from "@mui/icons-material/Google";
 import LoginIcon from "@mui/icons-material/Login";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
+import { setLogin } from "../features/auth/authSlice";
+import { LoadingButton } from "@mui/lab";
 export default function LoginForm() {
   const theme = useTheme();
   const user = useSelector((state) => state.auth.user);
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const handleFormSubmit = async (values) => {
-    await login(values);
-    // onSubmitProps.resetForm();
+    setError(null);
+    setLoading(true);
+    const { data, status } = await login(values);
+    if (status == 201) {
+      console.log(data);
+      dispatch(
+        setLogin({
+          user: data.user,
+          token: data.token,
+        })
+      );
+      navigate("/");
+      setLoading(false);
+      return;
+    }
+    setLoading(false);
+    setError(data.message);
   };
 
-  if (user) {
-    return <Navigate to="/" />;
-  }
+  if (user) return <Navigate to="/" />;
+
   return (
     <Formik
       initialValues={loginInitialValue}
@@ -55,7 +75,7 @@ export default function LoginForm() {
           <Typography>You need to Login before using the app</Typography>
           <form
             style={{
-              width: "40%",
+              width: "50%",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -107,9 +127,17 @@ export default function LoginForm() {
                 </InputAdornment>
               }
             />
-            <Button fullWidth variant="contained" type="submit">
+            <Typography sx={{ color: theme.palette.error.main }}>
+              {error}
+            </Typography>
+            <LoadingButton
+              fullWidth
+              variant="contained"
+              type="submit"
+              loading={isLoading}
+            >
               Login
-            </Button>
+            </LoadingButton>
             <div style={{ width: "100%" }}>
               <Divider> or </Divider>
             </div>
@@ -125,6 +153,7 @@ export default function LoginForm() {
                   color: theme.palette.secondary,
                   cursor: "pointer",
                 }}
+                onClick={() => navigate("/register")}
               >
                 Signup Here
               </span>

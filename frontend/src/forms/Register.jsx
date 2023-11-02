@@ -69,8 +69,6 @@ export default function RegisterForm() {
         handleBlur,
         handleChange,
         handleSubmit,
-        // setFieldValue,
-        // resetForm,
       }) => (
         <>
           <LoginIcon />
@@ -80,7 +78,7 @@ export default function RegisterForm() {
           <Typography>You need to Signup before using the app</Typography>
           <form
             style={{
-              width: "40%",
+              width: "50%",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -182,6 +180,7 @@ export default function RegisterForm() {
                   color: theme.palette.secondary,
                   cursor: "pointer",
                 }}
+                onClick={() => navigate("/login")}
               >
                 Login Here.
               </span>
