@@ -1,13 +1,14 @@
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
+const morgan = require("morgan");
 const path = require("path");
 
 const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
 const app = express();
-app.use(morgan(common))
+app.use(morgan("common"));
 const authRoutes = require("./routes/auth");
 
 const corsOptions = {
