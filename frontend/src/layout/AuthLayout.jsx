@@ -17,7 +17,7 @@ export default function AuthLayout({ children }) {
       <Box
         sx={{
           height: "100%",
-          width: "50%",
+          width: "50rem",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",

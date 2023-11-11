@@ -1,20 +1,14 @@
 import "./App.css";
 import { useMemo } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { themeSettings } from "./theme.js";
 import { useSelector } from "react-redux";
 
-import Invite from "./pages/Invite";
-
 import PrivateRoute from "./router/PrivateRoute";
 import AuthRoute from "./router/AuthRoute";
+import { DashBoard } from "./pages/DashBoard.jsx";
 export default function App() {
   const mode = useSelector((state) => state.theme.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -29,7 +23,7 @@ export default function App() {
           {user && (
             <PrivateRoute>
               <Routes>
-                <Route path="/" element={<Invite />} />
+                <Route path="/" element={<DashBoard />} />
               </Routes>
             </PrivateRoute>
           )}

@@ -75,7 +75,6 @@ export default function LoginForm() {
           <Typography>You need to Login before using the app</Typography>
           <form
             style={{
-              width: "50%",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
