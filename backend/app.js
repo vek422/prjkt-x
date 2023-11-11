@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
 const app = express();
+app.use(morgan(common))
 const authRoutes = require("./routes/auth");
 
 const corsOptions = {
