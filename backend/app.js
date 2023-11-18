@@ -10,7 +10,9 @@ require("dotenv").config();
 const app = express();
 app.use(morgan("common"));
 const authRoutes = require("./routes/auth");
-
+const projectRoutes = require("./routes/project");
+const verifyToken = require("./middleware/auth");
+const { findUser } = require("./controllers/auth");
 const corsOptions = {
   origin: true,
   credentials: true,
@@ -27,5 +29,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/auth", authRoutes);
-
+app.use("/project", verifyToken, projectRoutes);
+app.get("/user/find", findUser);
 module.exports = app;

@@ -20,6 +20,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import { setLogin } from "../features/auth/authSlice";
+import { setCurrentProject } from "../features/project/projectSlice";
 import { LoadingButton } from "@mui/lab";
 export default function LoginForm() {
   const theme = useTheme();
@@ -42,6 +43,14 @@ export default function LoginForm() {
         })
       );
       navigate("/");
+      //check if user has project
+      // if (data?.projects.length === 0) {
+      //   navigate("/create-project");
+      // } else {
+      //   if (data.projects)
+      //     dispatch(setCurrentProject({ project: data.projects[0] }));
+      //   navigate("/");
+      // }
       setLoading(false);
       return;
     }

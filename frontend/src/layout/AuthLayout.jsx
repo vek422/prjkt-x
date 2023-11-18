@@ -2,9 +2,10 @@
 import { Box, useTheme } from "@mui/material";
 export default function AuthLayout({ children }) {
   const theme = useTheme();
+  console.log("Why im running from authlayout");
   return (
     <Box
-      container
+      container="true"
       sx={{
         width: "100%",
         height: "100vh",

@@ -6,9 +6,9 @@ import { useSelector } from "react-redux";
 const AuthRoute = () => {
   const user = useSelector((state) => state.auth.user);
 
-  if (user) {
-    return <Navigate to="/" />;
-  }
+  // if (user) {
+  //   return <Navigate to="/" />;
+  // }
   return (
     <Routes>
       <Route path="/" element={<Login />} />

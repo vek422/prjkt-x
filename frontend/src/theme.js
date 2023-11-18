@@ -88,12 +88,12 @@ export const themeSettings = (mode) => {
               main: Latte.Lavender,
             },
             secondary: {
-              main: Latte.Blue,
+              main: Latte.Teal,
             },
             background: {
-              default: Latte.Crust,
+              default: Latte.Mantle,
               neutral: Latte.Base,
-              alt: Latte.Mantle,
+              alt: Latte.Crust,
             },
             text: {
               primary: Latte.Text,
