@@ -12,7 +12,7 @@ app.use(morgan("common"));
 const authRoutes = require("./routes/auth");
 const projectRoutes = require("./routes/project");
 const verifyToken = require("./middleware/auth");
-const { findUser } = require("./controllers/auth");
+const { findUser, refreshUser } = require("./controllers/auth");
 const corsOptions = {
   origin: true,
   credentials: true,
@@ -31,4 +31,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/auth", authRoutes);
 app.use("/project", verifyToken, projectRoutes);
 app.get("/user/find", findUser);
+app.get("/refreshUser", verifyToken, refreshUser);
+
 module.exports = app;

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 //form for creating a project
 import {
   Box,
@@ -21,6 +22,7 @@ import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentProject } from "../features/project/projectSlice";
+import refreshUser from "../auth/refreshUser";
 import { TopBar } from "../scene/NoProject";
 export default function CreateProjectForm({ setPageType }) {
   const user = useSelector((state) => state.auth.user);
@@ -85,6 +87,7 @@ export default function CreateProjectForm({ setPageType }) {
     if (status === 200) {
       console.log("Project Created SuccessFully");
       dispatch(setCurrentProject({ project: data }));
+      await refreshUser(token, user, dispatch);
       navigate("/");
       return;
     }

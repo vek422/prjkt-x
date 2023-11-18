@@ -10,7 +10,7 @@ import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { themeSettings } from "./theme.js";
 import { useSelector } from "react-redux";
 import { DashBoard } from "./pages/DashBoard.jsx";
-import CreateProject from "./scene/CreateProject.jsx";
+
 import ConditionalRoute from "./router/ConditionalRoute.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
@@ -31,7 +31,7 @@ export default function App() {
               element={
                 <ConditionalRoute condition={Boolean(user)} redirectTo="/login">
                   <ConditionalRoute
-                    condition={Boolean(user.projects.length !== 0)}
+                    condition={Boolean(user?.projects?.length !== 0)}
                     redirectTo="/createProject"
                   >
                     <DashBoard />

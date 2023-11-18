@@ -59,5 +59,16 @@ const findUser = async (req, res) => {
   const { email, firstName, lastName } = user;
   res.status(200).json({ user: { email, firstName, lastName } });
 };
-
-module.exports = { createUser, Login, findUser };
+const refreshUser = async (req, res) => {
+  const { userId } = req.query;
+  console.log(userId);
+  const reqUser = await User.findById(userId);
+  console.log(reqUser);
+  if (reqUser) {
+    let user = reqUser.toObject();
+    delete user.password;
+    res.status(200).json(user);
+    console.log(user);
+  }
+};
+module.exports = { createUser, Login, findUser, refreshUser };
