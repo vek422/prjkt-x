@@ -8,13 +8,17 @@ const taskSchema = new Schema(
       required: true,
       trim: true,
     },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     taskDesc: {
       type: String,
       required: true,
       trim: true,
     },
     assignedTo: [],
-    expects: [],
   },
   { timestamps: true }
 );

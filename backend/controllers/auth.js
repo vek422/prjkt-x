@@ -56,8 +56,8 @@ const findUser = async (req, res) => {
   let user = await User.findOne({ email: userEmail });
   if (!user) return res.status(404).json({ message: "User Not Found" });
 
-  const { email, firstName, lastName } = user;
-  res.status(200).json({ user: { email, firstName, lastName } });
+  const { email, firstName, lastName, _id } = user;
+  res.status(200).json({ user: { email, firstName, lastName, _id } });
 };
 const refreshUser = async (req, res) => {
   const { userId } = req.query;

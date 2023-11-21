@@ -80,13 +80,15 @@ export default function CreateProjectForm({ setPageType }) {
     setTeamMembers((state) => [...state, user]);
   };
   const handleFormSubmit = async (values, teamMates) => {
+    const teamMembers = teamMates.map((e) => e._id);
+
     const { status, data } = await handleCreateProjectRequest(
       values,
-      teamMates
+      teamMembers
     );
     if (status === 200) {
       console.log("Project Created SuccessFully");
-      dispatch(setCurrentProject({ project: data }));
+      // dispatch(setCurrentProject({ project: data }));
       await refreshUser(token, user, dispatch);
       navigate("/");
       return;

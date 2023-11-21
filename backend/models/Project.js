@@ -12,7 +12,17 @@ const projectSchema = new Schema(
       type: "String",
       trim: true,
     },
-    projectTasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
+    projectTasks: {
+      todo: [
+        { type: mongoose.Schema.Types.ObjectId, ref: "Task", default: [] },
+      ],
+      inProgress: [
+        { type: mongoose.Schema.Types.ObjectId, ref: "Task", default: [] },
+      ],
+      done: [
+        { type: mongoose.Schema.Types.ObjectId, ref: "Task", default: [] },
+      ],
+    },
     projectTeam: {
       admin: {
         type: mongoose.Schema.Types.ObjectId,

@@ -19,36 +19,38 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 import { useDispatch } from "react-redux";
 import { setLogout } from "../features/auth/authSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 export default function SideBar() {
   const theme = useTheme();
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(setLogout());
   };
-
+  const location = useLocation();
+  const navigate = useNavigate();
   const listItems = [
     {
-      isSelected: true,
+      isSelected: location.pathname === "/",
       icon: <DashboardRoundedIcon />,
       title: "Dashboard",
-      onclick: "",
+      onclick: () => navigate("/"),
     },
     {
       icon: <ListRoundedIcon />,
       title: "Tasks",
-      onclick: "",
-      isSelected: false,
+      onclick: () => navigate("/tasks"),
+      isSelected: location.pathname === "/tasks",
     },
     {
       icon: <MessageRoundedIcon />,
       title: "Message",
-      onclick: "",
+      onclick: () => null,
       isSelected: false,
     },
     {
       icon: <PermIdentityRoundedIcon />,
       title: "Users",
-      onclick: "",
+      onclick: () => null,
       isSelected: false,
     },
   ];

@@ -15,11 +15,12 @@ import ConditionalRoute from "./router/ConditionalRoute.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import CreateProjectPage from "./pages/CreateProjectPage.jsx";
+import TaskBoard from "./pages/TaskBoard.jsx";
 export default function App() {
   const mode = useSelector((state) => state.theme.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const user = useSelector((state) => state.auth.user);
-
+  const currentProject = useSelector((state) => state.project.currentProject);
   return (
     <div className="app">
       <Router>
@@ -35,6 +36,22 @@ export default function App() {
                     redirectTo="/createProject"
                   >
                     <DashBoard />
+                  </ConditionalRoute>
+                </ConditionalRoute>
+              }
+            />
+            <Route
+              path="/tasks"
+              element={
+                <ConditionalRoute
+                  condition={Boolean(user)}
+                  redirectTo={"/login"}
+                >
+                  <ConditionalRoute
+                    condition={Boolean(currentProject)}
+                    redirectTo={"/"}
+                  >
+                    <TaskBoard />
                   </ConditionalRoute>
                 </ConditionalRoute>
               }

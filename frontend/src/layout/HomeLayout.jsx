@@ -5,7 +5,7 @@ export default function HomeLayout({ children, sidebar }) {
   const theme = useTheme();
   return (
     <Grid
-      container
+      container="true"
       sx={{
         width: "100%",
         height: "100vh",

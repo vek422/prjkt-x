@@ -8,9 +8,8 @@ const projectSlice = createSlice({
   name: "project",
   initialState,
   reducers: {
-    setCurrentProject: (state, payload) => {
-      console.log(payload);
-      state.currentProject = payload.project;
+    setCurrentProject: (state, action) => {
+      state.currentProject = action.payload.project;
     },
   },
 });
