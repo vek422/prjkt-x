@@ -13,6 +13,7 @@ import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
 import TaskCard from "../components/TaskCard";
 import CreateTaskCard from "../components/CreateTaskCard";
+import { useState } from "react";
 
 function Topbar() {
   const currentProject = useSelector((state) => state.project.currentProject);
@@ -68,6 +69,8 @@ function Board() {
 }
 
 function TaskList({ type }) {
+  const currentProject = useSelector((state) => state.project.currentProject);
+  const [isCreateTaskOpen, setCreateTaskOpen] = useState(false);
   const theme = useTheme();
   return (
     <Grid
@@ -102,13 +105,17 @@ function TaskList({ type }) {
             {10}
           </Typography>
         </Box>
-        <IconButton>
+        <IconButton onClick={() => setCreateTaskOpen((state) => !state)}>
           <AddRounded />
         </IconButton>
       </Box>
       <Box sx={{ display: "flex", gap: 2, flexDirection: "column" }}>
-        <TaskCard />
-        <CreateTaskCard />
+        {currentProject["projectTasks"][type].map((e) => (
+          <TaskCard task={e} key={e._id} type={type} />
+        ))}
+        {isCreateTaskOpen && (
+          <CreateTaskCard setCreateTaskOpen={setCreateTaskOpen} type={type} />
+        )}
       </Box>
     </Grid>
   );

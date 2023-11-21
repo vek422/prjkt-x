@@ -39,6 +39,11 @@ const getProjectDetails = async (req, res) => {
         "lastName",
         "email",
         "_id",
+      ])
+      .populate([
+        "projectTasks.todo",
+        "projectTasks.inProgress",
+        "projectTasks.done",
       ]);
     if (!project) return res.status(404).json({ message: "Project Not Found" });
     return res.status(200).json({ project: project });

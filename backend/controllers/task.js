@@ -5,10 +5,16 @@ const createTask = async (req, res) => {
   const types = ["todo", "inProgress", "done"];
   try {
     const { taskName, taskDesc, userId, assigned, projectId, type } = req.body;
+    console.log("req.body: ", req.body);
     const taskType = types.includes(type) ? type : "todo";
     console.log(taskType);
+    console.log(projectId, userId);
     const project = await Project.findById(projectId);
-    if (!project) return res.status(404).json({ message: "User Not Found" });
+    if (!project) {
+      console.log("fauled at first step");
+      return res.status(404).json({ message: "User Not Found" });
+    }
+    console.log("passed");
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User Not Found" });
 
@@ -23,8 +29,20 @@ const createTask = async (req, res) => {
       $push: { [`projectTasks.${taskType}`]: savedTask._id },
     });
     console.log(x);
-    const savedProject = await Project.findById(projectId);
-    res.status(200).json({ task: savedTask, project: savedProject });
+    const savedProject = await Project.findById(projectId)
+      .populate("projectTeam.admin", ["firstName", "lastName", "email", "_id"])
+      .populate("projectTeam.teamMembers", [
+        "firstName",
+        "lastName",
+        "email",
+        "_id",
+      ])
+      .populate([
+        "projectTasks.todo",
+        "projectTasks.inProgress",
+        "projectTasks.done",
+      ]);
+    res.status(200).json({ project: savedProject });
   } catch (err) {
     return res.status(500).json({ message: `error at server : ${err}` });
   }
@@ -47,8 +65,20 @@ const changeTaskType = async (req, res) => {
     await Project.findByIdAndUpdate(projectId, {
       $addToSet: { [`projectTasks.${nextState}`]: taskId },
     });
-    const updatedProject = await Project.findById(projectId);
-    res.status(200).json({ project: updatedProject }).end();
+    const savedProject = await Project.findById(projectId)
+      .populate("projectTeam.admin", ["firstName", "lastName", "email", "_id"])
+      .populate("projectTeam.teamMembers", [
+        "firstName",
+        "lastName",
+        "email",
+        "_id",
+      ])
+      .populate([
+        "projectTasks.todo",
+        "projectTasks.inProgress",
+        "projectTasks.done",
+      ]);
+    res.status(200).json({ project: savedProject }).end();
   } catch (err) {
     return res.status(500).json({ message: `error at server : ${err}` });
   }
