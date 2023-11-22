@@ -11,8 +11,6 @@ const Project = require("../models/Project");
 const User = require("../models/User");
 const createProject = async (req, res) => {
   const { userId, projectName, projectDesc, teamMates = [] } = req.body;
-  console.log("teamMembers : ", teamMates);
-
   const newProject = new Project({
     projectName,
     projectDesc,
@@ -22,8 +20,24 @@ const createProject = async (req, res) => {
     },
   });
   const savedProject = await newProject.save();
-  await User.findByIdAndUpdate(userId, { projects: savedProject._id });
-  res.status(200).json(savedProject);
+  const project = await Project.findById(savedProject._id)
+    .populate("projectTeam.admin", ["firstName", "lastName", "email", "_id"])
+    .populate("projectTeam.teamMembers", [
+      "firstName",
+      "lastName",
+      "email",
+      "_id",
+    ]);
+  console.log("teamMate : ", teamMates);
+  await teamMates.forEach(async (teamMate) => {
+    const x = await User.findByIdAndUpdate(teamMate, {
+      $addToSet: { projects: savedProject._id },
+    });
+  });
+  await User.findByIdAndUpdate(userId, {
+    $addToSet: { projects: savedProject._id },
+  });
+  res.status(200).json(project);
 };
 
 const getProjectDetails = async (req, res) => {

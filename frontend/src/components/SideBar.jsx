@@ -20,11 +20,14 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { useDispatch } from "react-redux";
 import { setLogout } from "../features/auth/authSlice";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useLogout } from "../hooks/useLogout";
+import SwitchProject from "./SwitchProject";
 export default function SideBar() {
   const theme = useTheme();
-  const dispatch = useDispatch();
+
+  const logout = useLogout();
   const handleLogout = () => {
-    dispatch(setLogout());
+    logout();
   };
   const location = useLocation();
   const navigate = useNavigate();
@@ -74,7 +77,15 @@ export default function SideBar() {
           alignItems: "center",
         }}
       >
-        <Box sx={{ p: 2, py: 4, width: "100%" }}>
+        <Box
+          sx={{
+            p: 2,
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
           <Typography
             variant="h5"
             sx={{
@@ -85,6 +96,7 @@ export default function SideBar() {
           >
             PRJKT X
           </Typography>
+          <SwitchProject />
         </Box>
         <Divider sx={{ width: "80%" }} />
         <Box sx={{ width: "100%" }}>

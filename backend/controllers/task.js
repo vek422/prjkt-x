@@ -5,30 +5,24 @@ const createTask = async (req, res) => {
   const types = ["todo", "inProgress", "done"];
   try {
     const { taskName, taskDesc, userId, assigned, projectId, type } = req.body;
-    console.log("req.body: ", req.body);
     const taskType = types.includes(type) ? type : "todo";
-    console.log(taskType);
-    console.log(projectId, userId);
     const project = await Project.findById(projectId);
     if (!project) {
-      console.log("fauled at first step");
       return res.status(404).json({ message: "User Not Found" });
     }
-    console.log("passed");
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User Not Found" });
-
     const newTask = new Task({
       taskName,
       taskDesc,
       createdBy: user._id,
+      taskType: type,
       assignedTo: assigned || [],
     });
     const savedTask = await newTask.save();
     const x = await Project.findByIdAndUpdate(projectId, {
       $push: { [`projectTasks.${taskType}`]: savedTask._id },
     });
-    console.log(x);
     const savedProject = await Project.findById(projectId)
       .populate("projectTeam.admin", ["firstName", "lastName", "email", "_id"])
       .populate("projectTeam.teamMembers", [
@@ -52,8 +46,6 @@ const changeTaskType = async (req, res) => {
   const types = ["todo", "inProgress", "done"];
   try {
     const { taskId, projectId, currentState, nextState } = req.body;
-    if (!types.includes(currentState) || !types.includes(nextState))
-      return res.status(400).json({ message: "Invalid Operations" }).end();
     const project = await Project.findById(projectId);
     if (!project)
       return res.status(404).json({ message: "Project Not Found" }).end();
@@ -65,6 +57,7 @@ const changeTaskType = async (req, res) => {
     await Project.findByIdAndUpdate(projectId, {
       $addToSet: { [`projectTasks.${nextState}`]: taskId },
     });
+    await Task.findByIdAndUpdate(taskId, { taskType: nextState });
     const savedProject = await Project.findById(projectId)
       .populate("projectTeam.admin", ["firstName", "lastName", "email", "_id"])
       .populate("projectTeam.teamMembers", [
@@ -95,4 +88,29 @@ const fetchTasks = async (req, res) => {
   res.status(200).json({ project });
 };
 
-module.exports = { createTask, changeTaskType, fetchTasks };
+const assignUser = async (req, res) => {
+  const { taskId, userId, projectId } = req.body;
+  const user = await User.findById(userId);
+  if (!user) return res.status(404).json({ message: "User Not Found" });
+  const task = await Task.findById(taskId);
+  if (!task) return res.status(404).json({ message: "Task Not Found" });
+  const project = await Project.findById(projectId);
+  if (!project) return res.status(404).json({ message: "Project Not Found" });
+  await Task.findByIdAndUpdate(taskId, { assignedTo: { $addToSet: userId } });
+  const savedProject = await Project.findById(projectId)
+    .populate("projectTeam.admin", ["firstName", "lastName", "email", "_id"])
+    .populate("projectTeam.teamMembers", [
+      "firstName",
+      "lastName",
+      "email",
+      "_id",
+    ])
+    .populate([
+      "projectTasks.todo",
+      "projectTasks.inProgress",
+      "projectTasks.done",
+    ]);
+  res.status(200).json({ project: savedProject }).end();
+};
+
+module.exports = { createTask, changeTaskType, fetchTasks, assignUser };

@@ -89,6 +89,7 @@ export default function LoginForm() {
               alignItems: "center",
               flexDirection: "column",
               gap: "1rem",
+              width: "20rem",
             }}
             onSubmit={handleSubmit}
           >

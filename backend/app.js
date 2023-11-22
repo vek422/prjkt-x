@@ -9,6 +9,7 @@ const app = express();
 const authRoutes = require("./routes/auth");
 const projectRoutes = require("./routes/project");
 const taskRoutes = require("./routes/task");
+const userRoutes = require("./routes/user");
 const verifyToken = require("./middleware/auth");
 const { findUser, refreshUser } = require("./controllers/auth");
 const corsOptions = {
@@ -25,11 +26,13 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use("/test", (req, res) => {
+  res.send("Hello form the server");
+});
 app.use("/auth", authRoutes);
 app.use("/project", verifyToken, projectRoutes);
+app.use("/user", verifyToken, userRoutes);
 app.use("/task", verifyToken, taskRoutes);
-app.get("/user/find", findUser);
 app.get("/refreshUser", verifyToken, refreshUser);
 
 module.exports = app;

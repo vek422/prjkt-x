@@ -18,6 +18,7 @@ const taskSchema = new Schema(
       required: true,
       trim: true,
     },
+    taskType: { type: String, required: true, trim: true },
     assignedTo: [],
   },
   { timestamps: true }

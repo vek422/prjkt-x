@@ -12,12 +12,13 @@ import {
 import { Box } from "@mui/system";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-
+import { API_BASE_URL } from "../config/serviceApiConfig";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { setCurrentProject } from "../features/project/projectSlice";
 export default function TaskCard({ task, type }) {
   const states = ["todo", "inProgress", "done"].filter((e) => e !== type);
   const currentProject = useSelector((state) => state.project.currentProject);
+  const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -26,9 +27,15 @@ export default function TaskCard({ task, type }) {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const editPermission =
+    currentProject.projectTeam.admin._id === user._id ||
+    task.assignedTo.includes(user._id);
+  console.log("Admin Edit ", currentProject.projectTeam.admin);
+  console.log(editPermission);
   const handleClose = () => setAnchorEl(null);
   const handleCardChange = async (nextState) => {
-    const req = await fetch(`http://localhost:3000/task/changeTask`, {
+    const req = await fetch(`${API_BASE_URL}/task/changeTask`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,9 +62,11 @@ export default function TaskCard({ task, type }) {
         <Typography variant="h5" component="div" fontWeight={600}>
           {task.taskName}
         </Typography>
-        <IconButton onClick={handleClick}>
-          <MoreVertRounded />
-        </IconButton>
+        {editPermission && (
+          <IconButton onClick={handleClick}>
+            <MoreVertRounded />
+          </IconButton>
+        )}
         <Menu
           open={open}
           onClose={handleClose}

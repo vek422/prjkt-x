@@ -21,6 +21,7 @@ import { toggleMode } from "../features/theme/themeSlice";
 import { useEffect } from "react";
 import { API_BASE_URL } from "../config/serviceApiConfig";
 import { setCurrentProject } from "../features/project/projectSlice";
+import CreateProjectButton from "../components/CreateProjectButton";
 
 const SearchBox = () => {
   return (
@@ -71,6 +72,7 @@ function TopBar() {
       >
         <SearchBox />
         <Box sx={{ display: "flex", gap: 3, alignItems: "center" }}>
+          <CreateProjectButton />
           <IconButton>
             <NotificationsNoneRoundedIcon />
           </IconButton>
@@ -111,7 +113,6 @@ const ProjectInfo = () => {
       }
     })();
   }, []);
-  console.log(currentProject);
   return (
     currentProject && (
       <Box
@@ -147,12 +148,7 @@ const ProjectInfo = () => {
           </Typography>
         </Box>
         <Box>
-          <AvatarGroup>
-            <Avatar />
-            <Avatar />
-            <Avatar />
-            <Avatar />
-          </AvatarGroup>
+          <AvatarGroup></AvatarGroup>
         </Box>
       </Box>
     )
@@ -170,7 +166,7 @@ function ProjectProgress() {
         p: 2,
       }}
     >
-      <h1>Hello</h1>
+      <h1>Under Construction</h1>
     </Box>
   );
 }

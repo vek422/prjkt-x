@@ -13,7 +13,7 @@ import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
 import TaskCard from "../components/TaskCard";
 import CreateTaskCard from "../components/CreateTaskCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Topbar() {
   const currentProject = useSelector((state) => state.project.currentProject);
@@ -102,7 +102,7 @@ function TaskList({ type }) {
               fontWeight: 500,
             }}
           >
-            {10}
+            {currentProject["projectTasks"][type].length}
           </Typography>
         </Box>
         <IconButton onClick={() => setCreateTaskOpen((state) => !state)}>

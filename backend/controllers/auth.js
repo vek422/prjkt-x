@@ -51,14 +51,7 @@ const Login = async (req, res) => {
     res.status(500).json({ message: err }).end();
   }
 };
-const findUser = async (req, res) => {
-  const userEmail = req.query.email;
-  let user = await User.findOne({ email: userEmail });
-  if (!user) return res.status(404).json({ message: "User Not Found" });
 
-  const { email, firstName, lastName, _id } = user;
-  res.status(200).json({ user: { email, firstName, lastName, _id } });
-};
 const refreshUser = async (req, res) => {
   const { userId } = req.query;
   console.log(userId);
@@ -71,4 +64,5 @@ const refreshUser = async (req, res) => {
     console.log(user);
   }
 };
-module.exports = { createUser, Login, findUser, refreshUser };
+
+module.exports = { createUser, Login, refreshUser };

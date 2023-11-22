@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { setCurrentProject } from "../features/project/projectSlice";
 import { useState } from "react";
-
+import { API_BASE_URL } from "../config/serviceApiConfig";
 const createTaskValidation = yup.object().shape({
   taskName: yup.string().required("This Field is required"),
   taskDesc: yup.string().required("This Field is required"),
@@ -18,7 +18,7 @@ const createTaskInitialValues = {
 };
 
 const createTask = async (values, token, userId, projectId, type) => {
-  const req = await fetch(`http://localhost:3000/task/createTask`, {
+  const req = await fetch(`${API_BASE_URL}/task/createTask`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,

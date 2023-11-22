@@ -27,6 +27,7 @@ import { TopBar } from "../scene/NoProject";
 export default function CreateProjectForm({ setPageType }) {
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
+  console.log("token : ", token);
   const projectValidationSchema = yup.object().shape({
     projectName: yup
       .string()
@@ -88,7 +89,6 @@ export default function CreateProjectForm({ setPageType }) {
     );
     if (status === 200) {
       console.log("Project Created SuccessFully");
-      // dispatch(setCurrentProject({ project: data }));
       await refreshUser(token, user, dispatch);
       navigate("/");
       return;
@@ -101,6 +101,7 @@ export default function CreateProjectForm({ setPageType }) {
     setIsLoading(true);
     const res = await fetch(`${API_BASE_URL}/user/find?email=${inviteEmail}`, {
       method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
     });
     const fetchedUser = await res.json();
     setIsLoading(false);
