@@ -1,13 +1,6 @@
 /* eslint-disable react/prop-types */
 //form for creating a project
-import {
-  Box,
-  Button,
-  Divider,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import TeamMateCard from "../components/TeamMateCard";
 import { API_BASE_URL } from "../config/serviceApiConfig";
@@ -24,10 +17,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCurrentProject } from "../features/project/projectSlice";
 import refreshUser from "../auth/refreshUser";
 import { TopBar } from "../scene/NoProject";
+import InvitePeople from "./InvitePeople";
 export default function CreateProjectForm({ setPageType }) {
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
-  console.log("token : ", token);
   const projectValidationSchema = yup.object().shape({
     projectName: yup
       .string()
@@ -85,7 +78,7 @@ export default function CreateProjectForm({ setPageType }) {
 
     const { status, data } = await handleCreateProjectRequest(
       values,
-      teamMembers
+      teamMembers,
     );
     if (status === 200) {
       console.log("Project Created SuccessFully");
@@ -200,7 +193,12 @@ export default function CreateProjectForm({ setPageType }) {
         )}
       </Formik>
       <Box sx={{ width: "40%", px: "2rem" }}>
-        {/* <Divider width="100%" />   */}
+        <InvitePeople
+          TeamMembers={TeamMembers}
+          setTeamMembers={setTeamMembers}
+        />
+      </Box>
+      {/* <Box sx={{ width: "40%", px: "2rem" }}>
         <Box style={{ width: "100%" }}>
           <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
             <TextField
@@ -240,7 +238,7 @@ export default function CreateProjectForm({ setPageType }) {
             );
           })}
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 }
